@@ -1,0 +1,82 @@
+{
+  "formatVersion": "202502",
+  "computeEngineSettings": {},
+  "name": "Data_ingestion_Flow",
+  "queryGroups": [],
+  "documentLocale": "en-US",
+  "queriesMetadata": {
+    "Executive Summary": {
+      "queryId": "881cfdd3-2d9a-4d56-86eb-9c2a87e9a1d9",
+      "queryName": "Executive Summary",
+      "loadEnabled": false
+    },
+    "Asbestos": {
+      "queryId": "2aea2190-580b-428b-97e2-de19fa3d82ec",
+      "queryName": "Asbestos",
+      "loadEnabled": false
+    },
+    "Legionella": {
+      "queryId": "98802e2f-88e6-41bf-8e97-8a74327ad61b",
+      "queryName": "Legionella",
+      "loadEnabled": false
+    },
+    "Audit Actions": {
+      "queryId": "346985e2-f5be-4fd0-969a-fb247a8f8824",
+      "queryName": "Audit Actions",
+      "loadEnabled": false
+    },
+    "Statutory Compliance": {
+      "queryId": "61d5ae67-5399-4203-807d-1d4e8f851e2a",
+      "queryName": "Statutory Compliance",
+      "loadEnabled": false
+    },
+    "Heatmap": {
+      "queryId": "08754890-54cf-4117-b95e-e8f2c8d11e21",
+      "queryName": "Heatmap",
+      "loadEnabled": false
+    },
+    "Executive Summary_DataDestination": {
+      "queryId": "1f79ed61-9c09-4ca5-b63a-1a4ce18033ca",
+      "queryName": "Executive Summary_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "Asbestos_DataDestination": {
+      "queryId": "4e2096bb-f696-44ef-a681-45cbf5d05547",
+      "queryName": "Asbestos_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "Legionella_DataDestination": {
+      "queryId": "fc70ec57-b9b8-4aff-a719-deda3baf063b",
+      "queryName": "Legionella_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "Audit Actions_DataDestination": {
+      "queryId": "d6be1682-4dca-4ee4-ae20-a68ee37195b2",
+      "queryName": "Audit Actions_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "Heatmap_DataDestination": {
+      "queryId": "2a5f67eb-3ead-46a4-9ef0-72a21f0daf36",
+      "queryName": "Heatmap_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "Statutory Compliance_DataDestination": {
+      "queryId": "4ff0db23-d549-48ab-a143-308dbf7ab507",
+      "queryName": "Statutory Compliance_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    }
+  },
+  "connections": [
+    {
+      "path": "Lakehouse",
+      "kind": "Lakehouse",
+      "connectionId": "{\"ClusterId\":\"7850a03e-e84e-4dac-9dcf-e20c9ed55294\",\"DatasourceId\":\"029b1bb8-1495-4fd0-ad6b-5d8f6c64bb71\"}"
+    }
+  ]
+}

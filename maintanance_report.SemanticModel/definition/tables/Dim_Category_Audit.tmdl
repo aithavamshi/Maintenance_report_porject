@@ -1,0 +1,36 @@
+table Dim_Category_Audit
+	lineageTag: 57279607-3f70-48b3-b9db-4ca0b5ba6aa0
+
+	column Category
+		dataType: string
+		lineageTag: c9a8b08c-9983-4c11-be76-5d591650d94c
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category_Audit_Key
+		dataType: int64
+		formatString: 0
+		lineageTag: e4715864-dead-433f-a670-c91a5c232e7f
+		summarizeBy: none
+		sourceColumn: Category_Audit_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Category_Audit = m
+		mode: import
+		queryGroup: Audit
+		source =
+				let
+				    Source = #"Audit Actions_Source",
+				    #"Removed Other Columns" = Table.SelectColumns(Source,{"Category"}),
+				    #"Added Index" = Table.AddIndexColumn(#"Removed Other Columns", "Index", 1, 1, Int64.Type),
+				    #"Renamed Columns" = Table.RenameColumns(#"Added Index",{{"Index", "Category_Audit_Key"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

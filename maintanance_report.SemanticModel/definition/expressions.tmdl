@@ -1,0 +1,61 @@
+expression Asbestos_source =
+		let
+		    Source = Excel.Workbook(File.Contents("C:\Users\user\Downloads\Executive_Board_Compliance_Dashboard_GCQHSE (1)new.xlsx"), null, true),
+		    Asbestos_Sheet = Source{[Item="Asbestos",Kind="Sheet"]}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(Asbestos_Sheet, [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Metric", type text}, {"Target", Percentage.Type}, {"Actual", Int64.Type}, {"RAG", type text}, {"Notes", type any}})
+		in
+		    #"Changed Type"
+	lineageTag: 3b99a0e4-d416-4ccd-95f9-a9b21fdf428f
+	queryGroup: Asbestos
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Audit Actions_Source' =
+		let
+		    Source = Excel.Workbook(File.Contents("C:\Users\user\Downloads\Executive_Board_Compliance_Dashboard_GCQHSE (1)new.xlsx"), null, true),
+		    #"Audit Actions_Sheet" = Source{[Item="Audit Actions",Kind="Sheet"]}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Audit Actions_Sheet", [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Category", type text}, {"Total Actions", Int64.Type}, {"Completed", Int64.Type}, {"Overdue", Int64.Type}, {"RAG", type text}, {"Notes", type text}})
+		in
+		    #"Changed Type"
+	lineageTag: aa8ec457-92ca-4abf-a325-21774a085ec6
+	queryGroup: Audit
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression Legionella_source =
+		let
+		    Source = Excel.Workbook(File.Contents("C:\Users\user\Downloads\Executive_Board_Compliance_Dashboard_GCQHSE (1)new.xlsx"), null, true),
+		    Legionella_Sheet = Source{[Item="Legionella",Kind="Sheet"]}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(Legionella_Sheet, [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Metric", type text}, {"Target", Percentage.Type}, {"Actual", Int64.Type}, {"RAG", type text}, {"Notes", type any}})
+		in
+		    #"Changed Type"
+	lineageTag: fc2bf0b9-6552-417b-95fc-e4ae87c9124d
+	queryGroup: Legionella
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Statutory Compliance_Source' =
+		let
+		    Source = Excel.Workbook(File.Contents("C:\Users\user\Downloads\Executive_Board_Compliance_Dashboard_GCQHSE (1)new.xlsx"), null, true),
+		    #"Statutory Compliance_Sheet" = Source{[Item="Statutory Compliance",Kind="Sheet"]}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Statutory Compliance_Sheet", [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Compliance Area", type text}, {"Frequency", type text}, {"Last Inspection", type date}, {"Next Due", type date}, {"Status (RAG)", type text}, {"% Compliance", Int64.Type}}),
+		    #"Replaced Value" = Table.ReplaceValue(#"Changed Type","6-monthly","6-Monthly",Replacer.ReplaceText,{"Frequency"})
+		in
+		    #"Replaced Value"
+	lineageTag: 5df3a2bc-58fe-4f1b-83e6-e66de2d58271
+	queryGroup: 'Statutory Compliance'
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

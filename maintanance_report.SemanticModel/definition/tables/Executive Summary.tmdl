@@ -1,0 +1,60 @@
+table 'Executive Summary'
+	lineageTag: 37ca45d1-734f-4a11-af5c-31c782d41cb7
+
+	column 'Compliance Area'
+		dataType: string
+		lineageTag: cef77fa8-3d5a-4012-8e86-4a77cba9e0cc
+		summarizeBy: none
+		sourceColumn: Compliance Area
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Current Status (RAG)'
+		dataType: string
+		lineageTag: 3b18ae79-f46a-4285-bd1e-0ca199c7b7a2
+		summarizeBy: none
+		sourceColumn: Current Status (RAG)
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Key Risks'
+		dataType: string
+		lineageTag: 10ccdeaf-0971-48dc-b819-f02ad55740f1
+		summarizeBy: none
+		sourceColumn: Key Risks
+
+		annotation SummarizationSetBy = Automatic
+
+	column Trend
+		dataType: string
+		lineageTag: ef873541-c9c8-4d08-b407-a60523cbcf86
+		summarizeBy: none
+		sourceColumn: Trend
+
+		annotation SummarizationSetBy = Automatic
+
+	column Comments
+		dataType: string
+		lineageTag: a9391df0-3469-45dc-a62b-2d74c0336995
+		summarizeBy: none
+		sourceColumn: Comments
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Executive Summary' = m
+		mode: import
+		queryGroup: 'Executive Summery'
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\user\Downloads\Executive_Board_Compliance_Dashboard_GCQHSE (1)new.xlsx"), null, true),
+				    #"Executive Summary_Sheet" = Source{[Item="Executive Summary",Kind="Sheet"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(#"Executive Summary_Sheet",{{"Column1", type text}, {"Column2", type text}, {"Column3", type text}, {"Column4", type text}, {"Column5", type text}}),
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Changed Type", [PromoteAllScalars=true]),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Promoted Headers",{{"Compliance Area", type text}, {"Current Status (RAG)", type text}, {"Key Risks", type text}, {"Trend", type text}, {"Comments", type text}})
+				in
+				    #"Changed Type1"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

@@ -1,0 +1,37 @@
+table Dim_RAG
+	lineageTag: c779c734-9a04-4d07-adc5-50db887318ef
+
+	column RAG
+		dataType: string
+		lineageTag: b81b779a-2c66-40ac-b12b-5ec936587a0a
+		summarizeBy: none
+		sourceColumn: RAG
+
+		annotation SummarizationSetBy = Automatic
+
+	column Rag_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 3c03fe10-e46e-448d-9070-2a83f11ac9c1
+		summarizeBy: none
+		sourceColumn: Rag_key
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_RAG = m
+		mode: import
+		queryGroup: Asbestos
+		source =
+				let
+				    Source = Asbestos_source,
+				    #"Removed Other Columns" = Table.SelectColumns(Source,{"RAG"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Removed Other Columns"),
+				    #"Added Index" = Table.AddIndexColumn(#"Removed Duplicates", "Index", 1, 1, Int64.Type),
+				    #"Renamed Columns" = Table.RenameColumns(#"Added Index",{{"Index", "Rag_key"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

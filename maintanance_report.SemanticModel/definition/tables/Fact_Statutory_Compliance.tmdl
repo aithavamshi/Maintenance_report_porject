@@ -1,0 +1,91 @@
+table Fact_Statutory_Compliance
+	lineageTag: e8764bc2-276d-4827-9113-cb285eb7a77d
+
+	column 'Last Inspection'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: ce46320f-c2cf-4378-a37a-158bef5bbc60
+		summarizeBy: none
+		sourceColumn: Last Inspection
+
+		variation Variation
+			isDefault
+			relationship: 2e7a1f78-696d-4394-b9e5-2ada3afd8a43
+			defaultHierarchy: LocalDateTable_6b04c058-b34f-4cda-ac85-1b87cadc75be.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Next Due'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: c120728a-3326-4816-8c3e-8b824b7cb39d
+		summarizeBy: none
+		sourceColumn: Next Due
+
+		variation Variation
+			isDefault
+			relationship: 9b7c04e6-4426-476b-a34b-4eb8f52eaa4c
+			defaultHierarchy: LocalDateTable_d2685f8c-bb97-44f7-8d4b-7bfa4d74ea1a.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column '% Compliance'
+		dataType: int64
+		formatString: 0
+		lineageTag: 93b0c5be-b9d4-4915-ae63-cec4d936b0d2
+		summarizeBy: sum
+		sourceColumn: % Compliance
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Statutory _Compliance_Area_Key'
+		dataType: int64
+		formatString: 0
+		lineageTag: a2295ae3-b1d9-4dcb-8e81-b34a76c86708
+		summarizeBy: none
+		sourceColumn: Statutory _Compliance_Area_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column Statutory_Frequency_key
+		dataType: int64
+		formatString: 0
+		lineageTag: b5ca8972-3d5a-449f-bfef-baf8ae1aac41
+		summarizeBy: none
+		sourceColumn: Statutory_Frequency_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column Rag_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 1eba875d-951b-4dd1-bc9d-3241c4c38bd6
+		summarizeBy: none
+		sourceColumn: Rag_key
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Fact_Statutory_Compliance = m
+		mode: import
+		queryGroup: 'Statutory Compliance'
+		source =
+				let
+				    Source = #"Statutory Compliance_Source",
+				    #"Merged Queries" = Table.NestedJoin(Source, {"Compliance Area"}, Dim_Compliance_Area_Statutory, {"Compliance Area"}, "Dim_Statutory_Compliance_Area", JoinKind.LeftOuter),
+				    #"Expanded Dim_Statutory_Compliance_Area" = Table.ExpandTableColumn(#"Merged Queries", "Dim_Statutory_Compliance_Area", {"Statutory _Compliance_Area_Key"}, {"Statutory _Compliance_Area_Key"}),
+				    #"Merged Queries1" = Table.NestedJoin(#"Expanded Dim_Statutory_Compliance_Area", {"Frequency"}, Dim_Frequency_Statutory, {"Frequency"}, "Dim_Statutory_Frequency", JoinKind.LeftOuter),
+				    #"Expanded Dim_Statutory_Frequency" = Table.ExpandTableColumn(#"Merged Queries1", "Dim_Statutory_Frequency", {"Statutory_Frequency_key"}, {"Statutory_Frequency_key"}),
+				    #"Merged Queries2" = Table.NestedJoin(#"Expanded Dim_Statutory_Frequency", {"Status (RAG)"}, Dim_RAG, {"RAG"}, "Dim_RAG", JoinKind.LeftOuter),
+				    #"Expanded Dim_RAG" = Table.ExpandTableColumn(#"Merged Queries2", "Dim_RAG", {"Rag_key"}, {"Rag_key"}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Expanded Dim_RAG",{"Compliance Area", "Frequency", "Status (RAG)"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

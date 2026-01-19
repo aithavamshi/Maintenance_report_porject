@@ -1,0 +1,68 @@
+table Heatmap
+	lineageTag: a55d396c-7067-4b43-b92c-552fcc095dd1
+
+	column 'Site / Area'
+		dataType: string
+		lineageTag: 60c5e73b-f63e-49f5-ab0d-27d2803cf2d2
+		summarizeBy: none
+		sourceColumn: Site / Area
+
+		annotation SummarizationSetBy = Automatic
+
+	column Asbestos
+		dataType: string
+		lineageTag: 72edd8d1-56f2-449e-97dc-7d0589b57096
+		summarizeBy: none
+		sourceColumn: Asbestos
+
+		annotation SummarizationSetBy = Automatic
+
+	column Legionella
+		dataType: string
+		lineageTag: bcc22d00-bde9-4476-bd28-881f53f43b9b
+		summarizeBy: none
+		sourceColumn: Legionella
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'FRA Actions'
+		dataType: string
+		lineageTag: f01cbfcb-daf9-4e75-af1c-204ca22cf18f
+		summarizeBy: none
+		sourceColumn: FRA Actions
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Statutory Compliance'
+		dataType: string
+		lineageTag: ba365830-658d-487f-9053-c869175c974e
+		summarizeBy: none
+		sourceColumn: Statutory Compliance
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Overall Risk Rating'
+		dataType: string
+		lineageTag: 30090b3c-2a37-4abb-a6fd-f84f134758db
+		summarizeBy: none
+		sourceColumn: Overall Risk Rating
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Heatmap = m
+		mode: import
+		queryGroup: Heatmap
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\user\Downloads\Executive_Board_Compliance_Dashboard_GCQHSE (1)new.xlsx"), null, true),
+				    Heatmap_Sheet = Source{[Item="Heatmap",Kind="Sheet"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(Heatmap_Sheet,{{"Column1", type text}, {"Column2", type text}, {"Column3", type text}, {"Column4", type text}, {"Column5", type text}, {"Column6", type text}}),
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Changed Type", [PromoteAllScalars=true]),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Promoted Headers",{{"Site / Area", type text}, {"Asbestos", type text}, {"Legionella", type text}, {"FRA Actions", type text}, {"Statutory Compliance", type text}, {"Overall Risk Rating", type text}})
+				in
+				    #"Changed Type1"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

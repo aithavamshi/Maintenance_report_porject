@@ -1,0 +1,77 @@
+table 'Fact_Audit Actions'
+	lineageTag: 01fd3f40-dbcb-4ee7-9458-880f8f6c8986
+
+	column 'Total Actions'
+		dataType: int64
+		formatString: 0
+		lineageTag: f85808a3-60c7-48d4-9e93-d013177bdd44
+		summarizeBy: sum
+		sourceColumn: Total Actions
+
+		annotation SummarizationSetBy = Automatic
+
+	column Completed
+		dataType: int64
+		formatString: 0
+		lineageTag: 96129e4e-f4a2-4faa-b9b5-13db572544e6
+		summarizeBy: sum
+		sourceColumn: Completed
+
+		annotation SummarizationSetBy = Automatic
+
+	column Overdue
+		dataType: int64
+		formatString: 0
+		lineageTag: 66cf0fa5-408e-41b4-bb1d-de1793475d15
+		summarizeBy: sum
+		sourceColumn: Overdue
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category_Audit_Key
+		dataType: int64
+		formatString: 0
+		lineageTag: e31ed593-170b-45d5-a327-5d961fc21d79
+		summarizeBy: none
+		sourceColumn: Category_Audit_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column Notes_Audit_Key
+		dataType: int64
+		formatString: 0
+		lineageTag: 1765c76f-74e6-4f2a-a279-093996f62e40
+		summarizeBy: none
+		sourceColumn: Notes_Audit_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column Rag_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 6a36ea9b-a7cc-4727-8d2d-aede8aec30d9
+		summarizeBy: none
+		sourceColumn: Rag_key
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Fact_Audit Actions' = m
+		mode: import
+		queryGroup: Audit
+		source =
+				let
+				    Source = #"Audit Actions_Source",
+				    #"Merged Queries" = Table.NestedJoin(Source, {"Category"}, Dim_Category_Audit, {"Category"}, "Dim_Category_Audit", JoinKind.LeftOuter),
+				    #"Expanded Dim_Category_Audit" = Table.ExpandTableColumn(#"Merged Queries", "Dim_Category_Audit", {"Category_Audit_Key"}, {"Category_Audit_Key"}),
+				    #"Merged Queries1" = Table.NestedJoin(#"Expanded Dim_Category_Audit", {"Notes"}, Dim_Notes_Audit, {"Notes"}, "Dim_Notes_Audit", JoinKind.LeftOuter),
+				    #"Expanded Dim_Notes_Audit" = Table.ExpandTableColumn(#"Merged Queries1", "Dim_Notes_Audit", {"Notes_Audit_Key"}, {"Notes_Audit_Key"}),
+				    #"Merged Queries2" = Table.NestedJoin(#"Expanded Dim_Notes_Audit", {"RAG"}, Dim_RAG, {"RAG"}, "Dim_RAG", JoinKind.LeftOuter),
+				    #"Expanded Dim_RAG" = Table.ExpandTableColumn(#"Merged Queries2", "Dim_RAG", {"Rag_key"}, {"Rag_key"}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Expanded Dim_RAG",{"Category", "RAG", "Notes"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

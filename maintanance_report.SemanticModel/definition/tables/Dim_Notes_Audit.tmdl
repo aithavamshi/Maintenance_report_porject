@@ -1,0 +1,36 @@
+table Dim_Notes_Audit
+	lineageTag: 6ea26665-605a-46a5-abab-33c26f8ff4b9
+
+	column Notes
+		dataType: string
+		lineageTag: 569dd9c9-a0e8-4a2f-9994-7723dcce0e68
+		summarizeBy: none
+		sourceColumn: Notes
+
+		annotation SummarizationSetBy = Automatic
+
+	column Notes_Audit_Key
+		dataType: int64
+		formatString: 0
+		lineageTag: 907f3478-520e-4895-a570-0ee33384ef10
+		summarizeBy: none
+		sourceColumn: Notes_Audit_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Notes_Audit = m
+		mode: import
+		queryGroup: Audit
+		source =
+				let
+				    Source = #"Audit Actions_Source",
+				    #"Removed Other Columns" = Table.SelectColumns(Source,{"Notes"}),
+				    #"Added Index" = Table.AddIndexColumn(#"Removed Other Columns", "Index", 1, 1, Int64.Type),
+				    #"Renamed Columns" = Table.RenameColumns(#"Added Index",{{"Index", "Notes_Audit_Key"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

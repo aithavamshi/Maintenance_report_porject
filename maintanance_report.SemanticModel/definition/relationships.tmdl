@@ -1,0 +1,54 @@
+relationship 2e7a1f78-696d-4394-b9e5-2ada3afd8a43
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Fact_Statutory_Compliance.'Last Inspection'
+	toColumn: LocalDateTable_6b04c058-b34f-4cda-ac85-1b87cadc75be.Date
+
+relationship 9b7c04e6-4426-476b-a34b-4eb8f52eaa4c
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Fact_Statutory_Compliance.'Next Due'
+	toColumn: LocalDateTable_d2685f8c-bb97-44f7-8d4b-7bfa4d74ea1a.Date
+
+relationship AutoDetected_04b29386-8f06-42b9-b4f1-25c6fb8f0517
+	fromColumn: Fact_Asbestos.Rag_key
+	toColumn: Dim_RAG.Rag_key
+
+relationship AutoDetected_be6dccfc-3fad-4646-88bf-4fb5bc435bcc
+	fromColumn: Fact_Legionella.Rag_key
+	toColumn: Dim_RAG.Rag_key
+
+relationship AutoDetected_0625c591-f297-4657-b4c2-efb4adba644c
+	fromColumn: 'Fact_Audit Actions'.Rag_key
+	toColumn: Dim_RAG.Rag_key
+
+relationship AutoDetected_800596e4-1aa9-458a-8840-9a8fe44b3d78
+	fromColumn: Fact_Statutory_Compliance.Rag_key
+	toColumn: Dim_RAG.Rag_key
+
+relationship AutoDetected_364af2ce-0545-4b67-b774-30e6f8af6981
+	fromColumn: Fact_Statutory_Compliance.'Statutory _Compliance_Area_Key'
+	toColumn: Dim_Compliance_Area_Statutory.'Statutory _Compliance_Area_Key'
+
+relationship AutoDetected_923eee7d-5a02-49f0-a1cb-8b4c3e9cbbf3
+	fromColumn: Fact_Statutory_Compliance.Statutory_Frequency_key
+	toColumn: Dim_Frequency_Statutory.Statutory_Frequency_key
+
+relationship 7bfa20b3-3de4-1dbb-ca5f-e7d3ac069809
+	fromColumn: Dim_Legionella_metric.Legionella_metric_key
+	toColumn: Fact_Legionella.Legionella_metric_key
+
+relationship bce35af4-d358-6c5d-799e-fcf8a3336c24
+	fromColumn: Fact_Asbestos.Asbestos_metric_key
+	toColumn: Dim_Asbestos_metric.Asbestos_metric_key
+
+relationship 6b34f943-deb7-10a5-fba2-118760bd5abf
+	fromColumn: 'Fact_Audit Actions'.Category_Audit_Key
+	toColumn: Dim_Category_Audit.Category_Audit_Key
+
+relationship 2edd11aa-2787-b323-6d90-fb393242325b
+	fromColumn: 'Fact_Audit Actions'.Notes_Audit_Key
+	toColumn: Dim_Notes_Audit.Notes_Audit_Key
+
+relationship d320c591-2ebd-0034-9dc4-f5d8a6aa16a3
+	fromColumn: 'Executive Summary'.'Current Status (RAG)'
+	toColumn: Dim_RAG.RAG
+

@@ -1,0 +1,36 @@
+table Dim_Compliance_Area_Statutory
+	lineageTag: 72eea9a9-f189-4f5b-a7d3-d8b1b789d008
+
+	column 'Compliance Area'
+		dataType: string
+		lineageTag: 523e1145-9e5c-4359-8343-e845ebdaa6ff
+		summarizeBy: none
+		sourceColumn: Compliance Area
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Statutory _Compliance_Area_Key'
+		dataType: int64
+		formatString: 0
+		lineageTag: 066e67ab-3fde-4bb5-9bc9-a29b5c39b90f
+		summarizeBy: none
+		sourceColumn: Statutory _Compliance_Area_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Compliance_Area_Statutory = m
+		mode: import
+		queryGroup: 'Statutory Compliance'
+		source =
+				let
+				    Source = #"Statutory Compliance_Source",
+				    #"Removed Other Columns" = Table.SelectColumns(Source,{"Compliance Area"}),
+				    #"Added Index" = Table.AddIndexColumn(#"Removed Other Columns", "Index", 1, 1, Int64.Type),
+				    #"Renamed Columns" = Table.RenameColumns(#"Added Index",{{"Index", "Statutory _Compliance_Area_Key"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

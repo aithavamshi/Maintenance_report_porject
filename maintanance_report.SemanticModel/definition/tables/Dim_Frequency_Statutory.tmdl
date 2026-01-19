@@ -1,0 +1,37 @@
+table Dim_Frequency_Statutory
+	lineageTag: 7e24b62c-7f89-477b-8281-bdabc8bad397
+
+	column Frequency
+		dataType: string
+		lineageTag: da880f10-29c9-4519-ba76-8da0d13179b0
+		summarizeBy: none
+		sourceColumn: Frequency
+
+		annotation SummarizationSetBy = Automatic
+
+	column Statutory_Frequency_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 6500bcde-4a0d-41bd-ac92-4e41be3a8c18
+		summarizeBy: none
+		sourceColumn: Statutory_Frequency_key
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Frequency_Statutory = m
+		mode: import
+		queryGroup: 'Statutory Compliance'
+		source =
+				let
+				    Source = #"Statutory Compliance_Source",
+				    #"Removed Other Columns" = Table.SelectColumns(Source,{"Frequency"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Removed Other Columns"),
+				    #"Added Index" = Table.AddIndexColumn(#"Removed Duplicates", "Index", 1, 1, Int64.Type),
+				    #"Renamed Columns" = Table.RenameColumns(#"Added Index",{{"Index", "Statutory_Frequency_key"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
